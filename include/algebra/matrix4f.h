@@ -70,7 +70,7 @@ public:
 		return _[Index];
 	}
 	
-	const float * const GetPointer(void) const
+	float const * GetPointer(void) const
 	{
 		return _;
 	}

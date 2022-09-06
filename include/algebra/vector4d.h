@@ -24,6 +24,8 @@
 #ifndef ALGEBRA__VECTOR4D_H
 #define ALGEBRA__VECTOR4D_H
 
+#include <cmath>
+
 class Vector4d
 {
 public:
@@ -56,7 +58,7 @@ public:
 	
 	double Length(void) const
 	{
-		return sqrt(m_V[0] * m_V[0] + m_V[1] * m_V[1] + m_V[2] * m_V[2] + m_V[3] * m_V[3]);
+		return std::sqrt(m_V[0] * m_V[0] + m_V[1] * m_V[1] + m_V[2] * m_V[2] + m_V[3] * m_V[3]);
 	}
 	
 	double SquaredLength(void) const

@@ -24,7 +24,9 @@
 #ifndef ALGEBRA__QUATERNION_H
 #define ALGEBRA__QUATERNION_H
 
-#include "axis_angle.h"
+#include <cmath>
+
+#include <algebra/axis_angle.h>
 
 class Matrix4f;
 class Vector3f;
@@ -106,8 +108,8 @@ public:
 	Quaternion & RotationX(float Radians)
 	{
 		Radians /= 2.0f;
-		_[0] = cos(Radians);
-		_[1] = sin(Radians);
+		_[0] = std::cos(Radians);
+		_[1] = std::sin(Radians);
 		_[2] = 0.0f;
 		_[3] = 0.0f;
 		
@@ -117,9 +119,9 @@ public:
 	Quaternion & RotationY(float Radians)
 	{
 		Radians /= 2.0f;
-		_[0] = cos(Radians);
+		_[0] = std::cos(Radians);
 		_[1] = 0.0f;
-		_[2] = sin(Radians);
+		_[2] = std::sin(Radians);
 		_[3] = 0.0f;
 		
 		return *this;
@@ -128,10 +130,10 @@ public:
 	Quaternion & RotationZ(float Radians)
 	{
 		Radians /= 2.0f;
-		_[0] = cos(Radians);
+		_[0] = std::cos(Radians);
 		_[1] = 0.0f;
 		_[2] = 0.0f;
-		_[3] = sin(Radians);
+		_[3] = std::sin(Radians);
 		
 		return *this;
 	}
@@ -139,9 +141,9 @@ public:
 	Quaternion & Rotation(const AxisAngle & AxisAngle)
 	{
 		float AngleInRadians(AxisAngle._[3] / 2.0f);
-		float SinusRadians(sin(AngleInRadians));
+		float SinusRadians(std::sin(AngleInRadians));
 		
-		_[0] = cos(AngleInRadians);
+		_[0] = std::cos(AngleInRadians);
 		_[1] = AxisAngle._[0] * SinusRadians;
 		_[2] = AxisAngle._[1] * SinusRadians;
 		_[3] = AxisAngle._[2] * SinusRadians;
@@ -153,9 +155,9 @@ public:
 	{
 		AngleInRadians /= 2.0f;
 		
-		float SinusRadians(sin(AngleInRadians));
+		float SinusRadians(std::sin(AngleInRadians));
 		
-		_[0] = cos(AngleInRadians);
+		_[0] = std::cos(AngleInRadians);
 		_[1] = X * SinusRadians;
 		_[2] = Y * SinusRadians;
 		_[3] = Z * SinusRadians;
@@ -167,11 +169,11 @@ public:
 	{
 		AngleInRadians /= 2.0f;
 		
-		float Sinus(sin(AngleInRadians));
+		float Sinus(std::sin(AngleInRadians));
 		float SinusX(Sinus * X);
 		float SinusY(Sinus * Y);
 		float SinusZ(Sinus * Z);
-		float Cosinus(cos(AngleInRadians));
+		float Cosinus(std::cos(AngleInRadians));
 		
 		return Quaternion(_[0] * Cosinus - _[1] * SinusX - _[2] * SinusY - _[3] * SinusZ, _[1] * Cosinus + _[0] * SinusX - _[3] * SinusY + _[2] * SinusZ, _[2] * Cosinus + _[3] * SinusX + _[0] * SinusY - _[1] * SinusZ, _[3] * Cosinus - _[2] * SinusX + _[1] * SinusY + _[0] * SinusZ);
 	}
@@ -180,8 +182,8 @@ public:
 	{
 		AngleInRadians /= 2.0f;
 		
-		float Sinus(sin(AngleInRadians));
-		float Cosinus(cos(AngleInRadians));
+		float Sinus(std::sin(AngleInRadians));
+		float Cosinus(std::cos(AngleInRadians));
 		
 		return Quaternion(_[0] * Cosinus - _[1] * Sinus, _[1] * Cosinus + _[0] * Sinus, _[2] * Cosinus + _[3] * Sinus, _[3] * Cosinus - _[2] * Sinus);
 	}
@@ -190,8 +192,8 @@ public:
 	{
 		AngleInRadians /= 2.0f;
 		
-		float Sinus(sin(AngleInRadians));
-		float Cosinus(cos(AngleInRadians));
+		float Sinus(std::sin(AngleInRadians));
+		float Cosinus(std::cos(AngleInRadians));
 		
 		return Quaternion(_[0] * Cosinus - _[2] * Sinus, _[1] * Cosinus - _[3] * Sinus, _[2] * Cosinus + _[0] * Sinus, _[3] * Cosinus + _[1] * Sinus);
 	}
@@ -200,8 +202,8 @@ public:
 	{
 		AngleInRadians /= 2.0f;
 		
-		float Sinus(sin(AngleInRadians));
-		float Cosinus(cos(AngleInRadians));
+		float Sinus(std::sin(AngleInRadians));
+		float Cosinus(std::cos(AngleInRadians));
 		
 		return Quaternion(_[0] * Cosinus - _[3] * Sinus, _[1] * Cosinus + _[2] * Sinus, _[2] * Cosinus - _[1] * Sinus, _[3] * Cosinus + _[0] * Sinus);
 	}
@@ -258,7 +260,7 @@ public:
  * IMPLEMENTATION
  **/
 
-#include "vector3f.h"
+#include <algebra/vector3f.h>
 
 inline Quaternion Quaternion::CreateFromAxisAndAngle(const Vector3f & Axis, float AngleInRadians)
 {

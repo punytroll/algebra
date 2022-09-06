@@ -24,6 +24,8 @@
 #ifndef ALGEBRA__VECTOR2F_H
 #define ALGEBRA__VECTOR2F_H
 
+#include <cmath>
+
 class Vector2f
 {
 private:
@@ -39,6 +41,12 @@ public:
 		_[1] = 0.0f;
 	}
 	
+	Vector2f(Vector2f const & Other)
+	{
+		_[0] = Other._[0];
+		_[1] = Other._[1];
+	}
+	
 	Vector2f(float Value1, float Value2)
 	{
 		_[0] = Value1;
@@ -47,7 +55,7 @@ public:
 	
 	static Vector2f CreateFromMagnitudeAndAngle(float Magnitude, float Angle)
 	{
-		return Vector2f(Magnitude * cos(Angle), Magnitude * sin(Angle));
+		return Vector2f(Magnitude * std::cos(Angle), Magnitude * std::sin(Angle));
 	}
 	
 	Vector2f & Set(float Value1, float Value2)
@@ -60,7 +68,7 @@ public:
 	
 	float Length(void) const
 	{
-		return sqrtf(_[0] * _[0] + _[1] * _[1]);
+		return std::sqrt(_[0] * _[0] + _[1] * _[1]);
 	}
 	
 	float SquaredLength(void) const
@@ -70,7 +78,7 @@ public:
 	
 	Vector2f & Normalize(void)
 	{
-		float L(sqrtf(_[0] * _[0] + _[1] * _[1]));
+		float L(std::sqrt(_[0] * _[0] + _[1] * _[1]));
 		
 		_[0] /= L;
 		_[1] /= L;
@@ -80,7 +88,7 @@ public:
 	
 	Vector2f Normalized(void) const
 	{
-		float L(sqrtf(_[0] * _[0] + _[1] * _[1]));
+		float L(std::sqrt(_[0] * _[0] + _[1] * _[1]));
 		
 		return Vector2f(_[0] / L, _[1] / L);
 	}
@@ -188,8 +196,8 @@ public:
 	
 	Vector2f & Turn(float Angle)
 	{
-		float SinAngle(sin(Angle));
-		float CosAngle(cos(Angle));
+		float SinAngle(std::sin(Angle));
+		float CosAngle(std::cos(Angle));
 		float fX((CosAngle * _[0]) + (-SinAngle * _[1]));
 		float fY((SinAngle * _[0]) + (CosAngle * _[1]));
 		
@@ -201,7 +209,7 @@ public:
 	
 	Vector2f Turned(float Angle) const
 	{
-		float SinAngle(sin(Angle));
+		float SinAngle(std::sin(Angle));
 		float CosAngle(cos(Angle));
 		
 		return Vector2f((CosAngle * _[0]) + (-SinAngle * _[1]), (SinAngle * _[0]) + (CosAngle * _[1]));

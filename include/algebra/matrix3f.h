@@ -24,6 +24,7 @@
 #ifndef ALGEBRA__MATRIX3F_H
 #define ALGEBRA__MATRIX3F_H
 
+#include <cmath>
 #include <utility>
 
 class Matrix4f;
@@ -87,8 +88,8 @@ public:
 	static Matrix3f CreateRotationX(float Angle)
 	{
 		Matrix3f Result;
-		float Cos(cos(Angle));
-		float Sin(sin(Angle));
+		float Cos(std::cos(Angle));
+		float Sin(std::sin(Angle));
 		
 		Result._[0] = 1.0f;
 		Result._[1] = 0.0f;
@@ -106,8 +107,8 @@ public:
 	static Matrix3f CreateRotationY(float Angle)
 	{
 		Matrix3f Result;
-		float Cos(cos(Angle));
-		float Sin(sin(Angle));
+		float Cos(std::cos(Angle));
+		float Sin(std::sin(Angle));
 		
 		Result._[0] = Cos;
 		Result._[1] = 0.0f;
@@ -125,8 +126,8 @@ public:
 	static Matrix3f CreateRotationZ(float Angle)
 	{
 		Matrix3f Result;
-		float Cos(cos(Angle));
-		float Sin(sin(Angle));
+		float Cos(std::cos(Angle));
+		float Sin(std::sin(Angle));
 		
 		Result._[0] = Cos;
 		Result._[1] = Sin;
@@ -206,7 +207,7 @@ public:
 		return _[Index];
 	}
 	
-	const float * const GetPointer(void) const
+	float const * GetPointer(void) const
 	{
 		return _;
 	}
@@ -254,8 +255,8 @@ public:
 	
 	Matrix3f & RotationX(float Angle)
 	{
-		float Cos(cos(Angle));
-		float Sin(sin(Angle));
+		float Cos(std::cos(Angle));
+		float Sin(std::sin(Angle));
 		
 		_[0] = 1.0f;
 		_[1] = 0.0f;
@@ -272,8 +273,8 @@ public:
 	
 	Matrix3f & RotationY(float Angle)
 	{
-		float Cos(cos(Angle));
-		float Sin(sin(Angle));
+		float Cos(std::cos(Angle));
+		float Sin(std::sin(Angle));
 		
 		_[0] = Cos;
 		_[1] = 0.0f;

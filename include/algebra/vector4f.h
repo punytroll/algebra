@@ -24,6 +24,8 @@
 #ifndef ALGEBRA__VECTOR4F_H
 #define ALGEBRA__VECTOR4F_H
 
+#include <cmath>
+
 class Matrix4f;
 class Quaternion;
 class Vector3f;
@@ -38,6 +40,14 @@ private:
 public:
 	Vector4f(void)
 	{
+	}
+    
+	Vector4f(Vector4f const & Other)
+	{
+        _[0] = Other._[0];
+        _[1] = Other._[1];
+        _[2] = Other._[2];
+        _[3] = Other._[3];
 	}
 	
 	Vector4f(bool)
@@ -68,7 +78,7 @@ public:
 	
 	float Length(void) const
 	{
-		return sqrtf(_[0] * _[0] + _[1] * _[1] + _[2] * _[2] + _[3] * _[3]);
+		return std::sqrt(_[0] * _[0] + _[1] * _[1] + _[2] * _[2] + _[3] * _[3]);
 	}
 	
 	float SquaredLength(void) const
@@ -78,7 +88,7 @@ public:
 	
 	Vector4f & Normalize(void)
 	{
-		float L(sqrtf(_[0] * _[0] + _[1] * _[1] + _[2] * _[2] + _[3] * _[3]));
+		float L(std::sqrt(_[0] * _[0] + _[1] * _[1] + _[2] * _[2] + _[3] * _[3]));
 		
 		_[0] /= L;
 		_[1] /= L;
@@ -192,7 +202,7 @@ public:
 		return _[Index];
 	}
 	
-	const float * const GetPointer(void) const
+	float const * GetPointer(void) const
 	{
 		return _;
 	}
@@ -202,7 +212,7 @@ public:
  * IMPLEMENTATION
  **/
 
-#include "quaternion.h"
+#include <algebra/quaternion.h>
 
 inline Vector4f & Vector4f::operator*=(const Quaternion & AQuaternion)
 {

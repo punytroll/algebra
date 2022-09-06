@@ -24,6 +24,8 @@
 #ifndef ALGEBRA__VECTOR3F_H
 #define ALGEBRA__VECTOR3F_H
 
+#include <cmath>
+
 class Matrix3f;
 class Matrix4f;
 class Quaternion;
@@ -38,6 +40,13 @@ private:
 public:
 	Vector3f(void)
 	{
+	}
+    
+	Vector3f(Vector3f const & Other)
+	{
+        _[0] = Other._[0];
+        _[1] = Other._[1];
+        _[2] = Other._[2];
 	}
 	
 	static Vector3f CreateFromComponents(float Value1, float Value2, float Value3);
@@ -63,7 +72,7 @@ public:
 	
 	float Length(void) const
 	{
-		return sqrtf(_[0] * _[0] + _[1] * _[1] + _[2] * _[2]);
+		return std::sqrt(_[0] * _[0] + _[1] * _[1] + _[2] * _[2]);
 	}
 	
 	float SquaredLength(void) const
@@ -188,7 +197,7 @@ public:
 		return _[Index];
 	}
 	
-	const float * const GetPointer(void) const
+	float const * GetPointer(void) const
 	{
 		return _;
 	}
@@ -198,10 +207,10 @@ public:
  * IMPLEMENTATION
  **/
 
-#include "matrix3f.h"
-#include "matrix4f.h"
-#include "quaternion.h"
-#include "vector4f.h"
+#include <algebra/matrix3f.h>
+#include <algebra/matrix4f.h>
+#include <algebra/quaternion.h>
+#include <algebra/vector4f.h>
 	
 inline Vector3f Vector3f::CreateFromComponents(float Value0, float Value1, float Value2)
 {
