@@ -1,7 +1,7 @@
 project(
   'algebra',
   'cpp',
-  version: '2.1.0',
+  version: '2.1.1',
   meson_version: '>=0.63.0',
   default_options: [
     'cpp_std=c++20',
