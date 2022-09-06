@@ -25,7 +25,6 @@
 #define ALGEBRA__MATRIX3F_H
 
 #include <cmath>
-#include <utility>
 
 class Matrix4f;
 class Vector3f;

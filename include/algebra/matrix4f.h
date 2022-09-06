@@ -24,8 +24,6 @@
 #ifndef ALGEBRA__MATRIX4F_H
 #define ALGEBRA__MATRIX4F_H
 
-#include <utility>
-
 class Matrix3f;
 class Quaternion;
 class Vector3f;
