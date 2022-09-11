@@ -1,0 +1,6 @@
+- place everything into Algebra namespace
+- replace '_' members by m_Components
+- replace GetPointer() by GetComponents()
+- replace Vector2f(bool) with static CreateZero constructor
+- replace Vector2f(float, float) with static CreateFromComponents constructor
+- can the default constructor be hidden and a static CreateUninitialized constructor be supplied?
