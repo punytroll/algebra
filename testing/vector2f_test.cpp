@@ -56,7 +56,7 @@ auto NotEquals(float One, float Two, float Delta = 0.0001f) -> bool
 
 auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
 {
-    // testing that the default constructor doesn't initialize the components
+    // testing default constructor doesn't initialize the components
     {
         auto Data = GetUnInitializedArray<Vector2f>();
         auto Value = new (Data.data()) Vector2f{};
@@ -64,7 +64,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         assert((*Value)[0] != 0.0f);
         assert((*Value)[1] != 0.0f);
     }
-    // testing that the (bool) constructor does initialize the components
+    // testing (bool) constructor does initialize the components
     {
         auto Data = GetUnInitializedArray<Vector2f>();
         auto Value = new (Data.data()) Vector2f{true};
@@ -72,7 +72,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         assert((*Value)[0] == 0.0f);
         assert((*Value)[1] == 0.0f);
     }
-    // testing the (float, float) constructor
+    // testing (float, float) constructor
     {
         auto Data = GetUnInitializedArray<Vector2f>();
         auto Value = new (Data.data()) Vector2f{4.0f, 2.4f};
@@ -80,7 +80,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         assert((*Value)[0] == 4.0f);
         assert((*Value)[1] == 2.4f);
     }
-    // testing the copy constructor
+    // testing copy constructor
     {
         auto OldValue = Vector2f{6.0f, 1.4f};
         auto Data = GetUnInitializedArray<Vector2f>();
@@ -89,7 +89,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         assert((*Value)[0] == 6.0f);
         assert((*Value)[1] == 1.4f);
     }
-    // testing the static CreateFromMagnitudeAndAngle constructor
+    // testing static CreateFromMagnitudeAndAngle constructor
     {
         auto Value = Vector2f::CreateFromMagnitudeAndAngle(4.0f, PI_2);
         
@@ -137,7 +137,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         
         assert(Value.SquaredLength() == 0.0f);
     }
-    // testing that Normalize() return this
+    // testing Normalize() return this
     {
         auto Value = Vector2f{2.0f, 1.0f};
         
@@ -147,7 +147,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         
         assert(&Result == &Value);
     }
-    // testing that Normalize() changes this
+    // testing Normalize() changes this
     {
         auto Value = Vector2f{2.0f, 1.0f};
         
@@ -163,7 +163,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         assert(Equals(Value[0], 0.894427191) == true);
         assert(Equals(Value[1], 0.4472135955) == true);
     }
-    // testing that Normalize().Length() is 1.0f
+    // testing Normalize().Length() is 1.0f
     {
         auto Value = Vector2f{-4.0f, 2.555f};
         
@@ -177,7 +177,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         
         assert(&Result != &Value);
     }
-    // checking that Normalized() doesn't changes this
+    // checking Normalized() doesn't changes this
     {
         auto Value = Vector2f{-2.32f, 0.02f};
         
@@ -193,14 +193,14 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         assert(Equals(Result[0], 0.894427191) == true);
         assert(Equals(Result[1], 0.4472135955) == true);
     }
-    // testing that Normalized().Length() is 1.0f
+    // testing Normalized().Length() is 1.0f
     {
         auto Value = Vector2f{-4.0f, 2.555f};
         auto Result = Value.Normalized();
         
         assert(Equals(Result.Length(), 1.0f) == true);
     }
-    // testing that Scale() returns this
+    // testing Scale() returns this
     {
         auto Value = Vector2f{-7.1f, 0.04f};
         
@@ -210,7 +210,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         
         assert(&Result == &Value);
     }
-    // testing that Scale() changes this
+    // testing Scale() changes this
     {
         auto Value = Vector2f{-7.1f, 0.04f};
         
@@ -226,14 +226,14 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         assert(Equals(Value[0], 3.55f) == true);
         assert(Equals(Value[1], -0.02f) == true);
     }
-    // testing that Scaled() doesn't return this
+    // testing Scaled() doesn't return this
     {
         auto Value = Vector2f{-7.1f, 0.04f};
         auto Result = Value.Scaled(0.5);
         
         assert(&Result != &Value);
     }
-    // testing that Scaled() doesn't change this
+    // testing Scaled() doesn't change this
     {
         auto Value = Vector2f{-7.1f, 0.04f};
         
@@ -248,6 +248,380 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         
         assert(Equals(Result[0], 3.55f) == true);
         assert(Equals(Result[1], -0.02f) == true);
+    }
+    // testing binary operator Vector2f + Vector2f doesn't change LHS
+    {
+        auto LHS = Vector2f{9.4f, 3.2};
+        auto RHS = Vector2f{7.0f, -5.55f};
+        [[maybe_unused]] auto Result = (LHS + RHS);
+        
+        assert(LHS[0] == 9.4f);
+        assert(LHS[1] == 3.2f);
+    }
+    // testing binary operator Vector2f + Vector2f doesn't change RHS
+    {
+        auto LHS = Vector2f{9.4f, 3.2};
+        auto RHS = Vector2f{7.0f, -5.55f};
+        [[maybe_unused]] auto Result = (LHS + RHS);
+        
+        assert(RHS[0] == 7.0f);
+        assert(RHS[1] == -5.55f);
+    }
+    // testing the result of binary operator Vector2f + Vector2f
+    {
+        auto LHS = Vector2f{9.4f, 3.2};
+        auto RHS = Vector2f{7.0f, -5.55f};
+        auto Result = (LHS + RHS);
+        
+        assert(Equals(Result[0], 16.4f) == true);
+        assert(Equals(Result[1], -2.35f) == true);
+    }
+    // testing the result of binary operator Vector2f + Vector2f is independent from LHS
+    {
+        auto LHS = Vector2f{9.4f, 3.2};
+        auto RHS = Vector2f{7.0f, -5.55f};
+        auto Result = (LHS + RHS);
+        
+        assert(&LHS != &Result);
+        Result[0] = 0.0f;
+        Result[1] = 0.0f;
+        assert(LHS[0] == 9.4f);
+        assert(LHS[1] == 3.2f);
+    }
+    // testing the result of binary operator Vector2f + Vector2f is independent from RHS
+    {
+        auto LHS = Vector2f{9.4f, 3.2};
+        auto RHS = Vector2f{7.0f, -5.55f};
+        auto Result = (LHS + RHS);
+        
+        assert(&RHS != &Result);
+        Result[0] = 0.0f;
+        Result[1] = 0.0f;
+        assert(RHS[0] == 7.0f);
+        assert(RHS[1] == -5.55f);
+    }
+    // testing binary operator Vector2f - Vector2f doesn't change LHS
+    {
+        auto LHS = Vector2f{9.4f, 3.2};
+        auto RHS = Vector2f{7.0f, -5.55f};
+        [[maybe_unused]] auto Result = (LHS - RHS);
+        
+        assert(LHS[0] == 9.4f);
+        assert(LHS[1] == 3.2f);
+    }
+    // testing binary operator Vector2f - Vector2f doesn't change RHS
+    {
+        auto LHS = Vector2f{9.4f, 3.2};
+        auto RHS = Vector2f{7.0f, -5.55f};
+        [[maybe_unused]] auto Result = (LHS - RHS);
+        
+        assert(RHS[0] == 7.0f);
+        assert(RHS[1] == -5.55f);
+    }
+    // testing the result of binary operator Vector2f - Vector2f
+    {
+        auto LHS = Vector2f{9.4f, 3.2};
+        auto RHS = Vector2f{7.0f, -5.55f};
+        auto Result = (LHS - RHS);
+        
+        assert(Equals(Result[0], 2.4f) == true);
+        assert(Equals(Result[1], 8.75f) == true);
+    }
+    // testing the result of binary operator Vector2f - Vector2f is independent from LHS
+    {
+        auto LHS = Vector2f{9.4f, 3.2};
+        auto RHS = Vector2f{7.0f, -5.55f};
+        auto Result = (LHS - RHS);
+        
+        assert(&LHS != &Result);
+        Result[0] = 0.0f;
+        Result[1] = 0.0f;
+        assert(LHS[0] == 9.4f);
+        assert(LHS[1] == 3.2f);
+    }
+    // testing the result of binary operator Vector2f - Vector2f is independent from RHS
+    {
+        auto LHS = Vector2f{9.4f, 3.2};
+        auto RHS = Vector2f{7.0f, -5.55f};
+        auto Result = (LHS - RHS);
+        
+        assert(&RHS != &Result);
+        Result[0] = 0.0f;
+        Result[1] = 0.0f;
+        assert(RHS[0] == 7.0f);
+        assert(RHS[1] == -5.55f);
+    }
+    // testing binary operator Vector2f * float doesn't change LHS
+    {
+        auto LHS = Vector2f{-3.0f, -3.0f};
+        [[maybe_unused]] auto Result = LHS * -3.333333333f;
+        
+        assert(LHS[0] == -3.0f);
+        assert(LHS[1] == -3.0f);
+    }
+    // testing the result of binary operator Vector2f * float is independent from LHS
+    {
+        auto LHS = Vector2f{-3.0f, -3.0f};
+        auto Result = LHS * -3.333333333f;
+        
+        assert(&LHS != &Result);
+        Result[0] = 0.0f;
+        Result[1] = 0.0f;
+        assert(LHS[0] == -3.0f);
+        assert(LHS[1] == -3.0f);
+    }
+    // testing the result of binary operator Vector2f * float
+    {
+        auto LHS = Vector2f{-3.0f, -3.0f};
+        auto Result = LHS * -3.333333333f;
+        
+        assert(Equals(Result[0], 10.0f) == true);
+        assert(Equals(Result[1], 10.0f) == true);
+    }
+    // testing binary operator Vector2f / float doesn't change LHS
+    {
+        auto LHS = Vector2f{3.0f, 3.0f};
+        [[maybe_unused]] auto Result = LHS / 6.66666666666f;
+        
+        assert(LHS[0] == 3.0f);
+        assert(LHS[1] == 3.0f);
+    }
+    // testing the result of binary operator Vector2f / float is independent from LHS
+    {
+        auto LHS = Vector2f{3.0f, 3.0f};
+        auto Result = LHS / 6.66666666666f;
+        
+        assert(&LHS != &Result);
+        Result[0] = 0.0f;
+        Result[1] = 0.0f;
+        assert(LHS[0] == 3.0f);
+        assert(LHS[1] == 3.0f);
+    }
+    // testing the result of binary operator Vector2f / float
+    {
+        auto LHS = Vector2f{3.0f, 3.0f};
+        auto Result = LHS / 6.66666666666f;
+        
+        assert(Equals(Result[0], 0.45f) == true);
+        assert(Equals(Result[1], 0.45f) == true);
+    }
+    // testing binary operator Vector2f = Vector2f doesn't change RHS
+    {
+        auto LHS = Vector2f{-1.0f, -1.0f};
+        auto RHS = Vector2f{444.4f, -0.333333333f};
+        
+        LHS = RHS;
+        assert(RHS[0] == 444.4f);
+        assert(RHS[1] == -0.333333333f);
+    }
+    // testing binary operator Vector2f = Vector2f changes LHS
+    {
+        auto LHS = Vector2f{-1.0f, -1.0f};
+        auto RHS = Vector2f{444.4f, -0.333333333f};
+        
+        LHS = RHS;
+        assert(LHS[0] == 444.4f);
+        assert(LHS[1] == -0.333333333f);
+    }
+    // testing binary operator Vector2f = Vector2f returns reference to LHS
+    {
+        auto LHS = Vector2f{-1.0f, -1.0f};
+        auto RHS = Vector2f{444.4f, -0.333333333f};
+        auto & Result = (LHS = RHS);
+        
+        assert(&Result == &LHS);
+    }
+    // testing binary operator Vector2f += Vector2f doesn't change RHS
+    {
+        auto LHS = Vector2f{-100.0f, 100.0f};
+        auto RHS = Vector2f{444.4f, -0.333333333f};
+        
+        LHS += RHS;
+        assert(RHS[0] == 444.4f);
+        assert(RHS[1] == -0.333333333f);
+    }
+    // testing binary operator Vector2f += Vector2f changes LHS
+    {
+        auto LHS = Vector2f{-100.0f, 100.0f};
+        auto RHS = Vector2f{444.4f, -0.333333333f};
+        
+        LHS += RHS;
+        assert(LHS[0] == 344.4f);
+        assert(LHS[1] == 99.666666666f);
+    }
+    // testing binary operator Vector2f += Vector2f returns reference to LHS
+    {
+        auto LHS = Vector2f{-100.0f, 100.0f};
+        auto RHS = Vector2f{444.4f, -0.333333333f};
+        auto & Result = (LHS += RHS);
+        
+        assert(&Result == &LHS);
+    }
+    // testing binary operator Vector2f -= Vector2f doesn't change RHS
+    {
+        auto LHS = Vector2f{-100.0f, 100.0f};
+        auto RHS = Vector2f{444.4f, -0.333333333f};
+        
+        LHS -= RHS;
+        assert(RHS[0] == 444.4f);
+        assert(RHS[1] == -0.333333333f);
+    }
+    // testing binary operator Vector2f -= Vector2f changes LHS
+    {
+        auto RHS = Vector2f{444.4f, -0.333333333f};
+        auto LHS = Vector2f{-100.0f, 100.0f};
+        
+        LHS -= RHS;
+        assert(LHS[0] == -544.4f);
+        assert(LHS[1] == 100.333333333f);
+    }
+    // testing binary operator Vector2f -= Vector2f returns reference to LHS
+    {
+        auto LHS = Vector2f{-100.0f, 100.0f};
+        auto RHS = Vector2f{444.4f, -0.333333333f};
+        auto & Result = (LHS -= RHS);
+        
+        assert(&Result == &LHS);
+    }
+    // testing binary operator Vector2f *= float changes LHS
+    {
+        auto LHS = Vector2f{444.4f, -0.333333333f};
+        
+        LHS *= -100.0f;
+        assert(Equals(LHS[0], -44440.0f) == true);
+        assert(Equals(LHS[1], 33.3333333f) == true);
+    }
+    // testing binary operator Vector2f *= float returns reference to LHS
+    {
+        auto LHS = Vector2f{444.4f, -0.333333333f};
+        auto & Result = (LHS *= 123.0f);
+        
+        assert(&Result == &LHS);
+    }
+    // testing binary operator Vector2f /= float changes LHS
+    {
+        auto LHS = Vector2f{444.4f, -0.333333333f};
+        
+        LHS /= -100.0f;
+        assert(Equals(LHS[0], -4.444f) == true);
+        assert(Equals(LHS[1], 0.00333333333f) == true);
+    }
+    // testing binary operator Vector2f /= float returns reference to LHS
+    {
+        auto LHS = Vector2f{444.4f, -0.333333333f};
+        auto & Result = (LHS /= 123.0f);
+        
+        assert(&Result == &LHS);
+    }
+    // testing unary operator +Vector2f doesn't change this
+    {
+        auto Value = Vector2f{-12.12f, 0.321f};
+        [[maybe_unused]] auto Result = +Value;
+        
+        assert(Value[0] == -12.12f);
+        assert(Value[1] == 0.321f);
+    }
+    // testing unary operator +Vector2f creates an independent instance
+    {
+        auto Value = Vector2f{-12.12f, 0.321f};
+        auto Result = +Value;
+        
+        assert(&Value != &Result);
+        Result[0] = 0.0f;
+        Result[1] = 0.0f;
+        assert(Value[0] == -12.12f);
+        assert(Value[1] == 0.321f);
+    }
+    // testing the result unary operator +Vector2f
+    {
+        auto Value = Vector2f{-12.12f, 0.321f};
+        auto Result = +Value;
+        
+        assert(Result[0] == -12.12f);
+        assert(Result[1] == 0.321f);
+    }
+    // testing unary operator -Vector2f doesn't change this
+    {
+        auto Value = Vector2f{-12.12f, 0.321f};
+        [[maybe_unused]] auto Result = -Value;
+        
+        assert(Value[0] == -12.12f);
+        assert(Value[1] == 0.321f);
+    }
+    // testing unary operator -Vector2f creates an independent instance
+    {
+        auto Value = Vector2f{-12.12f, 0.321f};
+        auto Result = -Value;
+        
+        assert(&Value != &Result);
+        Result[0] = 0.0f;
+        Result[1] = 0.0f;
+        assert(Value[0] == -12.12f);
+        assert(Value[1] == 0.321f);
+    }
+    // testing the result of unary operator -Vector2f
+    {
+        auto Value = Vector2f{-12.12f, 0.321f};
+        auto Result = -Value;
+        
+        assert(Result[0] == 12.12f);
+        assert(Result[1] == -0.321f);
+    }
+    // testing Negate() returns Operand
+    {
+        auto Operand = Vector2f{-7.1f, 0.04f};
+        auto & Result = Operand.Negate();
+        
+        assert(&Result == &Operand);
+    }
+    // testing Negate() changes Operand
+    {
+        auto Operand = Vector2f{-7.1f, 0.04f};
+        
+        Operand.Negate();
+        assert(NotEquals(Operand[0], -7.1f) == true);
+        assert(NotEquals(Operand[1], 0.04f) == true);
+    }
+    // testing the result of Negate()
+    {
+        auto Operand = Vector2f{-7.1f, 0.04f};
+        
+        Operand.Negate();
+        assert(Equals(Operand[0], 7.1f) == true);
+        assert(Equals(Operand[1], -0.04f) == true);
+    }
+    // testing Negated() doesn't return Operand
+    {
+        auto Operand = Vector2f{-7.1f, 0.04f};
+        auto Result = Operand.Negated();
+        
+        assert(&Result != &Operand);
+    }
+    // testing the result of Negated() is independent from Operand
+    {
+        auto Operand = Vector2f{-7.1f, 0.04f};
+        auto Result = Operand.Negated();
+        
+        Result[0] = 0.0f;
+        Result[1] = 0.0f;
+        assert(Operand[0] == -7.1f);
+        assert(Operand[1] == 0.04f);
+    }
+    // testing Negated() doesn't change Operand
+    {
+        auto Operand = Vector2f{-7.1f, 0.04f};
+        
+        Operand.Negated();
+        assert(Equals(Operand[0], -7.1f) == true);
+        assert(Equals(Operand[1], 0.04f) == true);
+    }
+    // testing the result of Negated()
+    {
+        auto Operand = Vector2f{-7.1f, 0.04f};
+        auto Result = Operand.Negated();
+        
+        assert(Equals(Result[0], 7.1f) == true);
+        assert(Equals(Result[1], -0.04f) == true);
     }
     
     return 0;

@@ -1,6 +1,9 @@
+- fix indentation
 - place everything into Algebra namespace
 - replace '_' members by m_Components
 - replace GetPointer() by GetComponents()
 - replace Vector2f(bool) with static CreateZero constructor
-- replace Vector2f(float, float) with static CreateFromComponents constructor
+- add static CreateFromComponents constructor
 - can the default constructor be hidden and a static CreateUninitialized constructor be supplied?
+- operator=() should handle &Other == this
+- Vector2f::operator+() should explicitly create new Vector2f (not implicit copy constructor)
