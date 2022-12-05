@@ -378,6 +378,35 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         assert(Equals(Result[0], 10.0f) == true);
         assert(Equals(Result[1], 10.0f) == true);
     }
+    
+    
+    // testing binary operator float * Vector2f doesn't change RHS
+    {
+        auto RHS = Vector2f{-3.0f, -3.0f};
+        [[maybe_unused]] auto Result = -3.333333333f * RHS;
+        
+        assert(RHS[0] == -3.0f);
+        assert(RHS[1] == -3.0f);
+    }
+    // testing the result of binary operator float * Vector2f is independent from RHS
+    {
+        auto RHS = Vector2f{-3.0f, -3.0f};
+        auto Result = -3.333333333f * RHS;
+        
+        assert(&RHS != &Result);
+        Result[0] = 0.0f;
+        Result[1] = 0.0f;
+        assert(RHS[0] == -3.0f);
+        assert(RHS[1] == -3.0f);
+    }
+    // testing the result of binary operator float * Vector2f
+    {
+        auto RHS = Vector2f{-3.0f, -3.0f};
+        auto Result = -3.333333333f * RHS;
+        
+        assert(Equals(Result[0], 10.0f) == true);
+        assert(Equals(Result[1], 10.0f) == true);
+    }
     // testing binary operator Vector2f / float doesn't change LHS
     {
         auto LHS = Vector2f{3.0f, 3.0f};
@@ -622,6 +651,122 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         
         assert(Equals(Result[0], 7.1f) == true);
         assert(Equals(Result[1], -0.04f) == true);
+    }
+    // testing, that the dot product doesn't change either operand
+    {
+        auto Operand1 = Vector2f{3.0f, 0.0f};
+        auto Operand2 = Vector2f{0.0f, 12.0f};
+        
+        Operand1.Dot(Operand2);
+        assert(Equals(Operand1[0], 3.0f) == true);
+        assert(Equals(Operand1[1], 0.0f) == true);
+        assert(Equals(Operand2[0], 0.0f) == true);
+        assert(Equals(Operand2[1], 12.0f) == true);
+    }
+    // testing the result of the dot product
+    {
+        auto Operand1 = Vector2f{7.0f, 2.0f};
+        auto Operand2 = Vector2f{3.0f, 6.0f};
+        auto Result = Operand1.Dot(Operand2);
+        
+        assert(Result == 33.0f);
+    }
+    // testing Turn() return this
+    {
+        auto Value = Vector2f{2.0f, 1.0f};
+        
+        assert(&(Value.Turn(2.0f)) == &Value);
+        
+        auto & Result = Value.Turn(1.0f);
+        
+        assert(&Result == &Value);
+    }
+    // testing Turn() changes this
+    {
+        auto Value = Vector2f{2.0f, 1.0f};
+        
+        Value.Turn(1.2f);
+        assert(NotEquals(Value[0], 2.0f) == true);
+        assert(NotEquals(Value[1], 1.0f) == true);
+    }
+    // testing Turn() result
+    {
+        auto Value = Vector2f{2.0f, 1.0f};
+        
+        Value.Turn(PI_2);
+        assert(Equals(Value[0], -1.0f) == true);
+        assert(Equals(Value[1], 2.0f) == true);
+    }
+    // testing the return value of Turned() does not equal this
+    {
+        auto Value = Vector2f{2.0f, 1.0f};
+        auto Result = Value.Turned(1.0f);
+        
+        assert(&Result != &Value);
+    }
+    // testing that Turned() doesn't changes this
+    {
+        auto Value = Vector2f{-2.32f, 0.02f};
+        
+        Value.Turned(1.0f);
+        assert(Equals(Value[0], -2.32f) == true);
+        assert(Equals(Value[1], 0.02f) == true);
+    }
+    // testing the result of Turned()
+    {
+        auto Value = Vector2f{2.0f, 1.0f};
+        auto Result = Value.Turned(PI_2);
+        
+        assert(Equals(Result[0], -1.0f) == true);
+        assert(Equals(Result[1], 2.0f) == true);
+    }
+    // testing operator==
+    {
+        auto Value1 = Vector2f{8.1f, 4.9f};
+        auto Value2 = Vector2f{8.1f, 14.4f};
+        auto Value3 = Vector2f{0.9f, 4.9f};
+        auto Value4 = Vector2f{8.1f, 4.9f};
+        
+        assert((Value1 == Value1) == true);
+        assert((Value1 == Value2) == false);
+        assert((Value1 == Value3) == false);
+        assert((Value1 == Value4) == true);
+        assert((Value2 == Value1) == false);
+        assert((Value2 == Value2) == true);
+        assert((Value2 == Value3) == false);
+        assert((Value2 == Value4) == false);
+        assert((Value3 == Value1) == false);
+        assert((Value3 == Value2) == false);
+        assert((Value3 == Value3) == true);
+        assert((Value3 == Value4) == false);
+        assert((Value4 == Value1) == true);
+        assert((Value4 == Value2) == false);
+        assert((Value4 == Value3) == false);
+        assert((Value4 == Value4) == true);
+    }
+    // testing operator!=
+    {
+        auto Value1 = Vector2f{8.1f, 4.9f};
+        auto Value2 = Vector2f{8.1f, 14.4f};
+        auto Value3 = Vector2f{0.9f, 4.9f};
+        auto Value4 = Vector2f{8.1f, 4.9f};
+        
+        assert((Value1 != Value1) == false);
+        assert((Value1 != Value2) == true);
+        assert((Value1 != Value3) == true);
+        assert((Value1 != Value4) == false);
+        assert((Value2 != Value1) == true);
+        assert((Value2 != Value2) == false);
+        assert((Value2 != Value3) == true);
+        assert((Value2 != Value4) == true);
+        assert((Value3 != Value1) == true);
+        assert((Value3 != Value2) == true);
+        assert((Value3 != Value3) == false);
+        assert((Value3 != Value4) == true);
+        assert((Value4 != Value1) == false);
+        assert((Value4 != Value2) == true);
+        assert((Value4 != Value3) == true);
+        assert((Value4 != Value4) == false);
     }
     
     return 0;
