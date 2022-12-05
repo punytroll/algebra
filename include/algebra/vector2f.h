@@ -210,7 +210,7 @@ public:
 	Vector2f Turned(float Angle) const
 	{
 		float SinAngle(std::sin(Angle));
-		float CosAngle(cos(Angle));
+		float CosAngle(std::cos(Angle));
 		
 		return Vector2f((CosAngle * _[0]) + (-SinAngle * _[1]), (SinAngle * _[0]) + (CosAngle * _[1]));
 	}
