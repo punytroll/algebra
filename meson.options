@@ -1,0 +1,1 @@
+option('tests', type: 'feature', value: 'auto', description: 'Run unit tests when meson test is called. \'auto\' defaults to disabled when the project is a subproject.')

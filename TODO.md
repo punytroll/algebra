@@ -1,6 +1,10 @@
-- fix indentation
+- remove void parameters
 - place everything into Algebra namespace
 - replace '_' members by m_Components
+- auto with assignments
+- auto everything
+- infix const
+- trailing return types
 - replace GetPointer() by GetComponents()
 - replace Vector2f(bool) with static CreateZero constructor
 - add static CreateFromComponents constructor
