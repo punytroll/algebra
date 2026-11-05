@@ -1,4 +1,5 @@
 /**
+ * algebra
  * Copyright 2026 Hagen Möbius
  * SPDX-License-Identifier: MIT
 **/

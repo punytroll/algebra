@@ -9,11 +9,14 @@
 
 #include <cmath>
 
-#include <algebra/axis_angle.h>
-
 class Matrix4f;
 class Vector3f;
 class Vector4f;
+
+namespace Algebra
+{
+    class AxisAngle;
+}
 
 class Quaternion
 {
@@ -37,10 +40,7 @@ public:
         _[3] = Z;
     }
     
-    static auto CreateFromAxisAngle(Algebra::AxisAngle const & AxisAngle) -> Quaternion
-    {
-        return CreateIdentity().Rotation(AxisAngle);
-    }
+    static auto CreateFromAxisAngle(Algebra::AxisAngle const & AxisAngle) -> Quaternion;
     
     static Quaternion CreateFromAxisAndAngle(const Vector3f & Axis, float AngleInRadians);
     
@@ -121,18 +121,7 @@ public:
         return *this;
     }
     
-    auto Rotation(Algebra::AxisAngle const & AxisAngle) -> Quaternion &
-    {
-        auto AngleInRadians = AxisAngle.m_Components[3] / 2.0f;
-        auto SinusRadians = std::sin(AngleInRadians);
-        
-        _[0] = std::cos(AngleInRadians);
-        _[1] = AxisAngle.m_Components[0] * SinusRadians;
-        _[2] = AxisAngle.m_Components[1] * SinusRadians;
-        _[3] = AxisAngle.m_Components[2] * SinusRadians;
-        
-        return *this;
-    }
+    auto Rotation(Algebra::AxisAngle const & AxisAngle) -> Quaternion &;
     
     Quaternion & Rotation(float X, float Y, float Z, float AngleInRadians)
     {
@@ -243,11 +232,17 @@ public:
  * IMPLEMENTATION
  **/
 
+#include <algebra/axis_angle.h>
 #include <algebra/vector3f.h>
+
+inline auto Quaternion::CreateFromAxisAngle(Algebra::AxisAngle const & AxisAngle) -> Quaternion
+{
+    return Quaternion::CreateIdentity().Rotation(AxisAngle);
+}
 
 inline Quaternion Quaternion::CreateFromAxisAndAngle(const Vector3f & Axis, float AngleInRadians)
 {
-    return Quaternion().Rotation(Axis._[0], Axis._[1], Axis._[2], AngleInRadians);
+    return Quaternion().Rotation(Axis.m_Components[0], Axis.m_Components[1], Axis.m_Components[2], AngleInRadians);
 }
 
 inline Quaternion Quaternion::CreateIdentity(void)
@@ -273,6 +268,19 @@ inline Quaternion & Quaternion::Rotate(const Quaternion & Quaternion)
     _[1] = X;
     _[2] = Y;
     _[3] = Z;
+    
+    return *this;
+}
+    
+inline auto Quaternion::Rotation(Algebra::AxisAngle const & AxisAngle) -> Quaternion &
+{
+    auto AngleInRadians = AxisAngle.m_Components[3] / 2.0f;
+    auto SinusRadians = std::sin(AngleInRadians);
+    
+    _[0] = std::cos(AngleInRadians);
+    _[1] = AxisAngle.m_Components[0] * SinusRadians;
+    _[2] = AxisAngle.m_Components[1] * SinusRadians;
+    _[3] = AxisAngle.m_Components[2] * SinusRadians;
     
     return *this;
 }

@@ -99,9 +99,9 @@ public:
  * IMPLEMENTATION
  **/
 
-#include "quaternion.h"
-#include "vector3f.h"
-#include "vector4f.h"
+#include <algebra/quaternion.h>
+#include <algebra/vector3f.h>
+#include <algebra/vector4f.h>
 
 inline Matrix4f Matrix4f::CreateIdentity(void)
 {
@@ -239,9 +239,9 @@ inline Matrix4f Matrix4f::CreateTranslation(const Vector3f & TranslationVector)
     Result._[9] = 0.0f;
     Result._[10] = 1.0f;
     Result._[11] = 0.0f;
-    Result._[12] = TranslationVector._[0];
-    Result._[13] = TranslationVector._[1];
-    Result._[14] = TranslationVector._[2];
+    Result._[12] = TranslationVector.m_Components[0];
+    Result._[13] = TranslationVector.m_Components[1];
+    Result._[14] = TranslationVector.m_Components[2];
     Result._[15] = 1.0f;
     
     return Result;
@@ -589,18 +589,18 @@ inline Matrix4f & Matrix4f::RotateZ(float Radians)
 
 inline Matrix4f & Matrix4f::Scale(const Vector3f & Scale)
 {
-    _[0] *= Scale._[0];
-    _[1] *= Scale._[0];
-    _[2] *= Scale._[0];
-    _[3] *= Scale._[0];
-    _[4] *= Scale._[1];
-    _[5] *= Scale._[1];
-    _[6] *= Scale._[1];
-    _[7] *= Scale._[1];
-    _[8] *= Scale._[2];
-    _[9] *= Scale._[2];
-    _[10] *= Scale._[2];
-    _[11] *= Scale._[2];
+    _[0] *= Scale.m_Components[0];
+    _[1] *= Scale.m_Components[0];
+    _[2] *= Scale.m_Components[0];
+    _[3] *= Scale.m_Components[0];
+    _[4] *= Scale.m_Components[1];
+    _[5] *= Scale.m_Components[1];
+    _[6] *= Scale.m_Components[1];
+    _[7] *= Scale.m_Components[1];
+    _[8] *= Scale.m_Components[2];
+    _[9] *= Scale.m_Components[2];
+    _[10] *= Scale.m_Components[2];
+    _[11] *= Scale.m_Components[2];
     
     return *this;
 }
@@ -633,18 +633,18 @@ inline Matrix4f Matrix4f::Scaled(const Vector3f & Scale) const
 {
     Matrix4f Result;
     
-    Result._[0] = _[0] * Scale._[0];
-    Result._[1] = _[1] * Scale._[0];
-    Result._[2] = _[2] * Scale._[0];
-    Result._[3] = _[3] * Scale._[0];
-    Result._[4] = _[4] * Scale._[1];
-    Result._[5] = _[5] * Scale._[1];
-    Result._[6] = _[6] * Scale._[1];
-    Result._[7] = _[7] * Scale._[1];
-    Result._[8] = _[8] * Scale._[2];
-    Result._[9] = _[9] * Scale._[2];
-    Result._[10] = _[10] * Scale._[2];
-    Result._[11] = _[11] * Scale._[2];
+    Result._[0] = _[0] * Scale.m_Components[0];
+    Result._[1] = _[1] * Scale.m_Components[0];
+    Result._[2] = _[2] * Scale.m_Components[0];
+    Result._[3] = _[3] * Scale.m_Components[0];
+    Result._[4] = _[4] * Scale.m_Components[1];
+    Result._[5] = _[5] * Scale.m_Components[1];
+    Result._[6] = _[6] * Scale.m_Components[1];
+    Result._[7] = _[7] * Scale.m_Components[1];
+    Result._[8] = _[8] * Scale.m_Components[2];
+    Result._[9] = _[9] * Scale.m_Components[2];
+    Result._[10] = _[10] * Scale.m_Components[2];
+    Result._[11] = _[11] * Scale.m_Components[2];
     Result._[12] = _[12];
     Result._[13] = _[13];
     Result._[14] = _[14];
@@ -717,10 +717,10 @@ inline Matrix4f Matrix4f::Transformed(const Matrix4f & Matrix) const
 
 inline Matrix4f & Matrix4f::Translate(const Vector3f & Translation)
 {
-    _[12] += _[0] * Translation._[0] + _[4] * Translation._[1] + _[8] * Translation._[2];
-    _[13] += _[1] * Translation._[0] + _[5] * Translation._[1] + _[9] * Translation._[2];
-    _[14] += _[2] * Translation._[0] + _[6] * Translation._[1] + _[10] * Translation._[2];
-    _[15] += _[3] * Translation._[0] + _[7] * Translation._[1] + _[11] * Translation._[2];
+    _[12] += _[0] * Translation.m_Components[0] + _[4] * Translation.m_Components[1] + _[8] * Translation.m_Components[2];
+    _[13] += _[1] * Translation.m_Components[0] + _[5] * Translation.m_Components[1] + _[9] * Translation.m_Components[2];
+    _[14] += _[2] * Translation.m_Components[0] + _[6] * Translation.m_Components[1] + _[10] * Translation.m_Components[2];
+    _[15] += _[3] * Translation.m_Components[0] + _[7] * Translation.m_Components[1] + _[11] * Translation.m_Components[2];
     
     return *this;
 }
@@ -749,10 +749,10 @@ inline Matrix4f Matrix4f::Translated(const Vector3f & Translation) const
 {
     auto Result(*this);
     
-    Result._[12] += _[0] * Translation._[0] + _[4] * Translation._[1] + _[8] * Translation._[2];
-    Result._[13] += _[1] * Translation._[0] + _[5] * Translation._[1] + _[9] * Translation._[2];
-    Result._[14] += _[2] * Translation._[0] + _[6] * Translation._[1] + _[10] * Translation._[2];
-    Result._[15] += _[3] * Translation._[0] + _[7] * Translation._[1] + _[11] * Translation._[2];
+    Result._[12] += _[0] * Translation.m_Components[0] + _[4] * Translation.m_Components[1] + _[8] * Translation.m_Components[2];
+    Result._[13] += _[1] * Translation.m_Components[0] + _[5] * Translation.m_Components[1] + _[9] * Translation.m_Components[2];
+    Result._[14] += _[2] * Translation.m_Components[0] + _[6] * Translation.m_Components[1] + _[10] * Translation.m_Components[2];
+    Result._[15] += _[3] * Translation.m_Components[0] + _[7] * Translation.m_Components[1] + _[11] * Translation.m_Components[2];
     
     return Result;
 }

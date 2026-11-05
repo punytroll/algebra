@@ -1,12 +1,11 @@
 project(
   'algebra',
   'cpp',
-  version: '26.11.0',
+  version: '26.11.1',
   meson_version: '>=1.12.0',
   default_options: {
     'cpp_std': 'c++26',
     'warning_level': '3',
-    'werror': true,
   },
 )
 

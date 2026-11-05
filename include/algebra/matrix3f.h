@@ -314,7 +314,7 @@ public:
     }
 };
 
-#include "matrix4f.h"
+#include <algebra/matrix4f.h>
 
 inline Matrix3f Matrix3f::CreateFromTopLeftMatrix4f(const Matrix4f & Matrix)
 {

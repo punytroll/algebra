@@ -1,9 +1,9 @@
 /**
+ * algebra
  * Copyright 2026 Hagen Möbius
  * SPDX-License-Identifier: MIT
 **/
 
-#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstdint>
@@ -12,36 +12,13 @@
 
 #include <algebra/vector2f.h>
 
-template<class Type>
-auto GetUnInitializedArray() -> std::array<std::uint8_t, sizeof(Type)>
-{
-    auto Result = std::array<std::uint8_t, sizeof(Type)>{};
-    
-    for(auto & Byte : Result)
-    {
-        Byte = 0xa5;
-    }
-    
-    return Result;
-}
-
-inline constexpr auto PI_2 = std::numbers::pi_v<float> / 2.0f;
-
-auto Equals(float One, float Two, float Delta = 0.0001f) -> bool
-{
-    return std::abs(One - Two) < Delta;
-}
-
-auto NotEquals(float One, float Two, float Delta = 0.0001f) -> bool
-{
-    return std::abs(One - Two) > Delta;
-}
+#include "common.h"
 
 auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
 {
     // testing default constructor doesn't initialize the components
     {
-        auto Data = GetUnInitializedArray<Vector2f>();
+        auto Data = Algebra::Testing::GetUninitializedBytes<Vector2f>();
         auto Value = new (Data.data()) Vector2f{};
         
         assert((*Value)[0] != 0.0f);
@@ -49,7 +26,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
     }
     // testing (bool) constructor does initialize the components
     {
-        auto Data = GetUnInitializedArray<Vector2f>();
+        auto Data = Algebra::Testing::GetUninitializedBytes<Vector2f>();
         auto Value = new (Data.data()) Vector2f{true};
         
         assert((*Value)[0] == 0.0f);
@@ -57,7 +34,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
     }
     // testing (float, float) constructor
     {
-        auto Data = GetUnInitializedArray<Vector2f>();
+        auto Data = Algebra::Testing::GetUninitializedBytes<Vector2f>();
         auto Value = new (Data.data()) Vector2f{4.0f, 2.4f};
         
         assert((*Value)[0] == 4.0f);
@@ -66,7 +43,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
     // testing copy constructor
     {
         auto OldValue = Vector2f{6.0f, 1.4f};
-        auto Data = GetUnInitializedArray<Vector2f>();
+        auto Data = Algebra::Testing::GetUninitializedBytes<Vector2f>();
         auto Value = new (Data.data()) Vector2f{OldValue};
         
         assert((*Value)[0] == 6.0f);
@@ -74,14 +51,14 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
     }
     // testing static CreateFromMagnitudeAndAngle constructor
     {
-        auto Value = Vector2f::CreateFromMagnitudeAndAngle(4.0f, PI_2);
+        auto Value = Vector2f::CreateFromMagnitudeAndAngle(4.0f, Algebra::Testing::PI_2);
         
-        assert(Equals(Value[0], 0.0f) == true);
-        assert(Equals(Value[1], 4.0f) == true);
+        assert(Algebra::Testing::Equals(Value[0], 0.0f) == true);
+        assert(Algebra::Testing::Equals(Value[1], 4.0f) == true);
     }
     // testing Set() on an uninitialized value
     {
-        auto Data = GetUnInitializedArray<Vector2f>();
+        auto Data = Algebra::Testing::GetUninitializedBytes<Vector2f>();
         auto Value = new (Data.data()) Vector2f{};
         
         Value->Set(5.7f, -1.9f);
@@ -100,7 +77,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
     {
         auto Value = Vector2f{5.1f, -3.2f};
         
-        assert(Equals(Value.Length(), 6.0207972f));
+        assert(Algebra::Testing::Equals(Value.Length(), 6.0207972f));
     }
     // testing Length() on zeroed vector
     {
@@ -135,23 +112,23 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto Value = Vector2f{2.0f, 1.0f};
         
         Value.Normalize();
-        assert(NotEquals(Value[0], 2.0f) == true);
-        assert(NotEquals(Value[1], 1.0f) == true);
+        assert(Algebra::Testing::NotEquals(Value[0], 2.0f) == true);
+        assert(Algebra::Testing::NotEquals(Value[1], 1.0f) == true);
     }
     // testing Normalize() result
     {
         auto Value = Vector2f{2.0f, 1.0f};
         
         Value.Normalize();
-        assert(Equals(Value[0], 0.894427191) == true);
-        assert(Equals(Value[1], 0.4472135955) == true);
+        assert(Algebra::Testing::Equals(Value[0], 0.894427191) == true);
+        assert(Algebra::Testing::Equals(Value[1], 0.4472135955) == true);
     }
     // testing Normalize().Length() is 1.0f
     {
         auto Value = Vector2f{-4.0f, 2.555f};
         
         Value.Normalize();
-        assert(Equals(Value.Length(), 1.0f) == true);
+        assert(Algebra::Testing::Equals(Value.Length(), 1.0f) == true);
     }
     // checking the return value of Normalized()
     {
@@ -165,23 +142,23 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto Value = Vector2f{-2.32f, 0.02f};
         
         Value.Normalized();
-        assert(Equals(Value[0], -2.32f) == true);
-        assert(Equals(Value[1], 0.02f) == true);
+        assert(Algebra::Testing::Equals(Value[0], -2.32f) == true);
+        assert(Algebra::Testing::Equals(Value[1], 0.02f) == true);
     }
     // testing Normalized() result
     {
         auto Value = Vector2f{2.0f, 1.0f};
         auto Result = Value.Normalized();
         
-        assert(Equals(Result[0], 0.894427191) == true);
-        assert(Equals(Result[1], 0.4472135955) == true);
+        assert(Algebra::Testing::Equals(Result[0], 0.894427191) == true);
+        assert(Algebra::Testing::Equals(Result[1], 0.4472135955) == true);
     }
     // testing Normalized().Length() is 1.0f
     {
         auto Value = Vector2f{-4.0f, 2.555f};
         auto Result = Value.Normalized();
         
-        assert(Equals(Result.Length(), 1.0f) == true);
+        assert(Algebra::Testing::Equals(Result.Length(), 1.0f) == true);
     }
     // testing Scale() returns this
     {
@@ -198,16 +175,16 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto Value = Vector2f{-7.1f, 0.04f};
         
         Value.Scale(0.5);
-        assert(NotEquals(Value[0], -7.1f) == true);
-        assert(NotEquals(Value[1], 0.04f) == true);
+        assert(Algebra::Testing::NotEquals(Value[0], -7.1f) == true);
+        assert(Algebra::Testing::NotEquals(Value[1], 0.04f) == true);
     }
     // testing the result of Scale()
     {
         auto Value = Vector2f{-7.1f, 0.04f};
         
         Value.Scale(-0.5);
-        assert(Equals(Value[0], 3.55f) == true);
-        assert(Equals(Value[1], -0.02f) == true);
+        assert(Algebra::Testing::Equals(Value[0], 3.55f) == true);
+        assert(Algebra::Testing::Equals(Value[1], -0.02f) == true);
     }
     // testing Scaled() doesn't return this
     {
@@ -221,16 +198,16 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto Value = Vector2f{-7.1f, 0.04f};
         
         Value.Scaled(0.5);
-        assert(Equals(Value[0], -7.1f) == true);
-        assert(Equals(Value[1], 0.04f) == true);
+        assert(Algebra::Testing::Equals(Value[0], -7.1f) == true);
+        assert(Algebra::Testing::Equals(Value[1], 0.04f) == true);
     }
     // testing the result of Scaled()
     {
         auto Value = Vector2f{-7.1f, 0.04f};
         auto Result = Value.Scaled(-0.5);
         
-        assert(Equals(Result[0], 3.55f) == true);
-        assert(Equals(Result[1], -0.02f) == true);
+        assert(Algebra::Testing::Equals(Result[0], 3.55f) == true);
+        assert(Algebra::Testing::Equals(Result[1], -0.02f) == true);
     }
     // testing binary operator Vector2f + Vector2f doesn't change LHS
     {
@@ -256,8 +233,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto RHS = Vector2f{7.0f, -5.55f};
         auto Result = (LHS + RHS);
         
-        assert(Equals(Result[0], 16.4f) == true);
-        assert(Equals(Result[1], -2.35f) == true);
+        assert(Algebra::Testing::Equals(Result[0], 16.4f) == true);
+        assert(Algebra::Testing::Equals(Result[1], -2.35f) == true);
     }
     // testing the result of binary operator Vector2f + Vector2f is independent from LHS
     {
@@ -307,8 +284,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto RHS = Vector2f{7.0f, -5.55f};
         auto Result = (LHS - RHS);
         
-        assert(Equals(Result[0], 2.4f) == true);
-        assert(Equals(Result[1], 8.75f) == true);
+        assert(Algebra::Testing::Equals(Result[0], 2.4f) == true);
+        assert(Algebra::Testing::Equals(Result[1], 8.75f) == true);
     }
     // testing the result of binary operator Vector2f - Vector2f is independent from LHS
     {
@@ -358,8 +335,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto LHS = Vector2f{-3.0f, -3.0f};
         auto Result = LHS * -3.333333333f;
         
-        assert(Equals(Result[0], 10.0f) == true);
-        assert(Equals(Result[1], 10.0f) == true);
+        assert(Algebra::Testing::Equals(Result[0], 10.0f) == true);
+        assert(Algebra::Testing::Equals(Result[1], 10.0f) == true);
     }
     
     
@@ -387,8 +364,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto RHS = Vector2f{-3.0f, -3.0f};
         auto Result = -3.333333333f * RHS;
         
-        assert(Equals(Result[0], 10.0f) == true);
-        assert(Equals(Result[1], 10.0f) == true);
+        assert(Algebra::Testing::Equals(Result[0], 10.0f) == true);
+        assert(Algebra::Testing::Equals(Result[1], 10.0f) == true);
     }
     // testing binary operator Vector2f / float doesn't change LHS
     {
@@ -414,8 +391,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto LHS = Vector2f{3.0f, 3.0f};
         auto Result = LHS / 6.66666666666f;
         
-        assert(Equals(Result[0], 0.45f) == true);
-        assert(Equals(Result[1], 0.45f) == true);
+        assert(Algebra::Testing::Equals(Result[0], 0.45f) == true);
+        assert(Algebra::Testing::Equals(Result[1], 0.45f) == true);
     }
     // testing binary operator Vector2f = Vector2f doesn't change RHS
     {
@@ -500,8 +477,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto LHS = Vector2f{444.4f, -0.333333333f};
         
         LHS *= -100.0f;
-        assert(Equals(LHS[0], -44440.0f) == true);
-        assert(Equals(LHS[1], 33.3333333f) == true);
+        assert(Algebra::Testing::Equals(LHS[0], -44440.0f) == true);
+        assert(Algebra::Testing::Equals(LHS[1], 33.3333333f) == true);
     }
     // testing binary operator Vector2f *= float returns reference to LHS
     {
@@ -515,8 +492,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto LHS = Vector2f{444.4f, -0.333333333f};
         
         LHS /= -100.0f;
-        assert(Equals(LHS[0], -4.444f) == true);
-        assert(Equals(LHS[1], 0.00333333333f) == true);
+        assert(Algebra::Testing::Equals(LHS[0], -4.444f) == true);
+        assert(Algebra::Testing::Equals(LHS[1], 0.00333333333f) == true);
     }
     // testing binary operator Vector2f /= float returns reference to LHS
     {
@@ -591,16 +568,16 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto Operand = Vector2f{-7.1f, 0.04f};
         
         Operand.Negate();
-        assert(NotEquals(Operand[0], -7.1f) == true);
-        assert(NotEquals(Operand[1], 0.04f) == true);
+        assert(Algebra::Testing::NotEquals(Operand[0], -7.1f) == true);
+        assert(Algebra::Testing::NotEquals(Operand[1], 0.04f) == true);
     }
     // testing the result of Negate()
     {
         auto Operand = Vector2f{-7.1f, 0.04f};
         
         Operand.Negate();
-        assert(Equals(Operand[0], 7.1f) == true);
-        assert(Equals(Operand[1], -0.04f) == true);
+        assert(Algebra::Testing::Equals(Operand[0], 7.1f) == true);
+        assert(Algebra::Testing::Equals(Operand[1], -0.04f) == true);
     }
     // testing Negated() doesn't return Operand
     {
@@ -624,16 +601,16 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto Operand = Vector2f{-7.1f, 0.04f};
         
         Operand.Negated();
-        assert(Equals(Operand[0], -7.1f) == true);
-        assert(Equals(Operand[1], 0.04f) == true);
+        assert(Algebra::Testing::Equals(Operand[0], -7.1f) == true);
+        assert(Algebra::Testing::Equals(Operand[1], 0.04f) == true);
     }
     // testing the result of Negated()
     {
         auto Operand = Vector2f{-7.1f, 0.04f};
         auto Result = Operand.Negated();
         
-        assert(Equals(Result[0], 7.1f) == true);
-        assert(Equals(Result[1], -0.04f) == true);
+        assert(Algebra::Testing::Equals(Result[0], 7.1f) == true);
+        assert(Algebra::Testing::Equals(Result[1], -0.04f) == true);
     }
     // testing, that the dot product doesn't change either operand
     {
@@ -641,10 +618,10 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto Operand2 = Vector2f{0.0f, 12.0f};
         
         Operand1.Dot(Operand2);
-        assert(Equals(Operand1[0], 3.0f) == true);
-        assert(Equals(Operand1[1], 0.0f) == true);
-        assert(Equals(Operand2[0], 0.0f) == true);
-        assert(Equals(Operand2[1], 12.0f) == true);
+        assert(Algebra::Testing::Equals(Operand1[0], 3.0f) == true);
+        assert(Algebra::Testing::Equals(Operand1[1], 0.0f) == true);
+        assert(Algebra::Testing::Equals(Operand2[0], 0.0f) == true);
+        assert(Algebra::Testing::Equals(Operand2[1], 12.0f) == true);
     }
     // testing the result of the dot product
     {
@@ -669,16 +646,16 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto Value = Vector2f{2.0f, 1.0f};
         
         Value.Turn(1.2f);
-        assert(NotEquals(Value[0], 2.0f) == true);
-        assert(NotEquals(Value[1], 1.0f) == true);
+        assert(Algebra::Testing::NotEquals(Value[0], 2.0f) == true);
+        assert(Algebra::Testing::NotEquals(Value[1], 1.0f) == true);
     }
     // testing Turn() result
     {
         auto Value = Vector2f{2.0f, 1.0f};
         
-        Value.Turn(PI_2);
-        assert(Equals(Value[0], -1.0f) == true);
-        assert(Equals(Value[1], 2.0f) == true);
+        Value.Turn(Algebra::Testing::PI_2);
+        assert(Algebra::Testing::Equals(Value[0], -1.0f) == true);
+        assert(Algebra::Testing::Equals(Value[1], 2.0f) == true);
     }
     // testing the return value of Turned() does not equal this
     {
@@ -692,16 +669,16 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char * argv[]) -> int
         auto Value = Vector2f{-2.32f, 0.02f};
         
         Value.Turned(1.0f);
-        assert(Equals(Value[0], -2.32f) == true);
-        assert(Equals(Value[1], 0.02f) == true);
+        assert(Algebra::Testing::Equals(Value[0], -2.32f) == true);
+        assert(Algebra::Testing::Equals(Value[1], 0.02f) == true);
     }
     // testing the result of Turned()
     {
         auto Value = Vector2f{2.0f, 1.0f};
-        auto Result = Value.Turned(PI_2);
+        auto Result = Value.Turned(Algebra::Testing::PI_2);
         
-        assert(Equals(Result[0], -1.0f) == true);
-        assert(Equals(Result[1], 2.0f) == true);
+        assert(Algebra::Testing::Equals(Result[0], -1.0f) == true);
+        assert(Algebra::Testing::Equals(Result[1], 2.0f) == true);
     }
     // testing operator==
     {

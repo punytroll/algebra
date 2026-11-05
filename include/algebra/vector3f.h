@@ -14,12 +14,17 @@ class Matrix4f;
 class Quaternion;
 class Vector4f;
 
+namespace Algebra
+{
+    class AxisAngle;
+}
+
 class Vector3f
 {
+    friend Algebra::AxisAngle;
     friend Matrix4f;
     friend Quaternion;
-private:
-    float _[3];
+    
 public:
     Vector3f()
     {
@@ -27,9 +32,9 @@ public:
     
     Vector3f(Vector3f const & Other)
     {
-        _[0] = Other._[0];
-        _[1] = Other._[1];
-        _[2] = Other._[2];
+        m_Components[0] = Other.m_Components[0];
+        m_Components[1] = Other.m_Components[1];
+        m_Components[2] = Other.m_Components[2];
     }
     
     static Vector3f CreateFromComponents(float Value1, float Value2, float Value3);
@@ -46,21 +51,21 @@ public:
     
     Vector3f & Set(float Value1, float Value2, float Value3)
     {
-        _[0] = Value1;
-        _[1] = Value2;
-        _[2] = Value3;
+        m_Components[0] = Value1;
+        m_Components[1] = Value2;
+        m_Components[2] = Value3;
         
         return *this;
     }
     
     float Length(void) const
     {
-        return std::sqrt(_[0] * _[0] + _[1] * _[1] + _[2] * _[2]);
+        return std::sqrt(m_Components[0] * m_Components[0] + m_Components[1] * m_Components[1] + m_Components[2] * m_Components[2]);
     }
     
     float SquaredLength(void) const
     {
-        return _[0] * _[0] + _[1] * _[1] + _[2] * _[2];
+        return m_Components[0] * m_Components[0] + m_Components[1] * m_Components[1] + m_Components[2] * m_Components[2];
     }
     
     Vector3f & Negate(void);
@@ -79,12 +84,12 @@ public:
     
     Vector3f operator+(const Vector3f & Other) const
     {
-        return CreateFromComponents(_[0] + Other._[0], _[1] + Other._[1], _[2] + Other._[2]);
+        return CreateFromComponents(m_Components[0] + Other.m_Components[0], m_Components[1] + Other.m_Components[1], m_Components[2] + Other.m_Components[2]);
     }
     
     Vector3f operator-(const Vector3f & Other) const
     {
-        return CreateFromComponents(_[0] - Other._[0], _[1] - Other._[1], _[2] - Other._[2]);
+        return CreateFromComponents(m_Components[0] - Other.m_Components[0], m_Components[1] - Other.m_Components[1], m_Components[2] - Other.m_Components[2]);
     }
 
     Vector3f operator+(void) const
@@ -94,17 +99,17 @@ public:
     
     Vector3f operator-(void) const
     {
-        return CreateFromComponents(-_[0], -_[1], -_[2]);
+        return CreateFromComponents(-m_Components[0], -m_Components[1], -m_Components[2]);
     }
     
     Vector3f operator*(float Scalar) const
     {
-        return CreateFromComponents(_[0] * Scalar, _[1] * Scalar, _[2] * Scalar);
+        return CreateFromComponents(m_Components[0] * Scalar, m_Components[1] * Scalar, m_Components[2] * Scalar);
     }
     
     Vector3f operator/(float Scalar) const
     {
-        return CreateFromComponents(_[0] / Scalar, _[1] / Scalar, _[2] / Scalar);
+        return CreateFromComponents(m_Components[0] / Scalar, m_Components[1] / Scalar, m_Components[2] / Scalar);
     }
     
     Vector3f operator%(const Vector3f & Other)
@@ -114,48 +119,48 @@ public:
     
     Vector3f & operator=(const Vector3f & Other)
     {
-        _[0] = Other._[0];
-        _[1] = Other._[1];
-        _[2] = Other._[2];
+        m_Components[0] = Other.m_Components[0];
+        m_Components[1] = Other.m_Components[1];
+        m_Components[2] = Other.m_Components[2];
         
         return *this;
     }
     
     Vector3f & operator-=(const Vector3f & Other)
     {
-        _[0] -= Other._[0];
-        _[1] -= Other._[1];
-        _[2] -= Other._[2];
+        m_Components[0] -= Other.m_Components[0];
+        m_Components[1] -= Other.m_Components[1];
+        m_Components[2] -= Other.m_Components[2];
         
         return *this;
     }
     
     Vector3f & operator*=(float Scalar)
     {
-        _[0] *= Scalar;
-        _[1] *= Scalar;
-        _[2] *= Scalar;
+        m_Components[0] *= Scalar;
+        m_Components[1] *= Scalar;
+        m_Components[2] *= Scalar;
         
         return *this;
     }
     
     Vector3f & operator/=(float Scalar)
     {
-        _[0] /= Scalar;
-        _[1] /= Scalar;
-        _[2] /= Scalar;
+        m_Components[0] /= Scalar;
+        m_Components[1] /= Scalar;
+        m_Components[2] /= Scalar;
         
         return *this;
     }
     
     float Dot(const Vector3f & Other) const
     {
-        return _[0] * Other._[0] + _[1] * Other._[1] + _[2] * Other._[2];
+        return m_Components[0] * Other.m_Components[0] + m_Components[1] * Other.m_Components[1] + m_Components[2] * Other.m_Components[2];
     }
     
     Vector3f Cross(const Vector3f & Other) const
     {
-        return CreateFromComponents(_[1] * Other._[2] - _[2] * Other._[1], _[2] * Other._[0] - _[0] * Other._[2], _[0] * Other._[1] - _[1] * Other._[0]);
+        return CreateFromComponents(m_Components[1] * Other.m_Components[2] - m_Components[2] * Other.m_Components[1], m_Components[2] * Other.m_Components[0] - m_Components[0] * Other.m_Components[2], m_Components[0] * Other.m_Components[1] - m_Components[1] * Other.m_Components[0]);
     }
     
     Vector3f & operator*=(const Matrix3f & Matrix);
@@ -172,18 +177,21 @@ public:
     
     const float & operator[](int Index) const
     {
-        return _[Index];
+        return m_Components[Index];
     }
     
     float & operator[](int Index)
     {
-        return _[Index];
+        return m_Components[Index];
     }
     
     float const * GetPointer(void) const
     {
-        return _;
+        return m_Components;
     }
+    
+private:
+    float m_Components[3];
 };
 
 /**
@@ -199,9 +207,9 @@ inline Vector3f Vector3f::CreateFromComponents(float Value0, float Value1, float
 {
     Vector3f Result;
     
-    Result._[0] = Value0;
-    Result._[1] = Value1;
-    Result._[2] = Value2;
+    Result.m_Components[0] = Value0;
+    Result.m_Components[1] = Value1;
+    Result.m_Components[2] = Value2;
     
     return Result;
 }
@@ -210,9 +218,9 @@ inline Vector3f Vector3f::CreateFromVector4f(const Vector4f & Vector)
 {
     Vector3f Result;
     
-    Result._[0] = Vector._[0];
-    Result._[1] = Vector._[1];
-    Result._[2] = Vector._[2];
+    Result.m_Components[0] = Vector._[0];
+    Result.m_Components[1] = Vector._[1];
+    Result.m_Components[2] = Vector._[2];
     
     return Result;
 }
@@ -221,9 +229,9 @@ inline Vector3f Vector3f::CreateTranslationX(float X)
 {
     Vector3f Result;
     
-    Result._[0] = X;
-    Result._[1] = 0.0f;
-    Result._[2] = 0.0f;
+    Result.m_Components[0] = X;
+    Result.m_Components[1] = 0.0f;
+    Result.m_Components[2] = 0.0f;
     
     return Result;
 }
@@ -232,9 +240,9 @@ inline Vector3f Vector3f::CreateTranslationY(float Y)
 {
     Vector3f Result;
     
-    Result._[0] = 0.0f;
-    Result._[1] = Y;
-    Result._[2] = 0.0f;
+    Result.m_Components[0] = 0.0f;
+    Result.m_Components[1] = Y;
+    Result.m_Components[2] = 0.0f;
     
     return Result;
 }
@@ -243,9 +251,9 @@ inline Vector3f Vector3f::CreateTranslationZ(float Z)
 {
     Vector3f Result;
     
-    Result._[0] = 0.0f;
-    Result._[1] = 0.0f;
-    Result._[2] = Z;
+    Result.m_Components[0] = 0.0f;
+    Result.m_Components[1] = 0.0f;
+    Result.m_Components[2] = Z;
     
     return Result;
 }
@@ -254,18 +262,18 @@ inline Vector3f Vector3f::CreateZero(void)
 {
     Vector3f Result;
     
-    Result._[0] = 0.0f;
-    Result._[1] = 0.0f;
-    Result._[2] = 0.0f;
+    Result.m_Components[0] = 0.0f;
+    Result.m_Components[1] = 0.0f;
+    Result.m_Components[2] = 0.0f;
     
     return Result;
 }
 
 inline Vector3f & Vector3f::Negate(void)
 {
-    _[0] = -_[0];
-    _[1] = -_[1];
-    _[2] = -_[2];
+    m_Components[0] = -m_Components[0];
+    m_Components[1] = -m_Components[1];
+    m_Components[2] = -m_Components[2];
     
     return *this;
 }
@@ -274,67 +282,67 @@ inline Vector3f Vector3f::Negated(void) const
 {
     Vector3f Result;
     
-    Result._[0] = -_[0];
-    Result._[1] = -_[1];
-    Result._[2] = -_[2];
+    Result.m_Components[0] = -m_Components[0];
+    Result.m_Components[1] = -m_Components[1];
+    Result.m_Components[2] = -m_Components[2];
     
     return Result;
 }
 
 inline Vector3f & Vector3f::operator*=(const Matrix3f & Matrix)
 {
-    float Value0((Matrix._[0] * _[0]) + (Matrix._[3] * _[1]) + (Matrix._[6] * _[2]));
-    float Value1((Matrix._[1] * _[0]) + (Matrix._[4] * _[1]) + (Matrix._[7] * _[2]));
-    float Value2((Matrix._[2] * _[0]) + (Matrix._[5] * _[1]) + (Matrix._[8] * _[2]));
+    float Value0((Matrix._[0] * m_Components[0]) + (Matrix._[3] * m_Components[1]) + (Matrix._[6] * m_Components[2]));
+    float Value1((Matrix._[1] * m_Components[0]) + (Matrix._[4] * m_Components[1]) + (Matrix._[7] * m_Components[2]));
+    float Value2((Matrix._[2] * m_Components[0]) + (Matrix._[5] * m_Components[1]) + (Matrix._[8] * m_Components[2]));
     
-    _[0] = Value0;
-    _[1] = Value1;
-    _[2] = Value2;
+    m_Components[0] = Value0;
+    m_Components[1] = Value1;
+    m_Components[2] = Value2;
     
     return *this;
 }
 
 inline Vector3f & Vector3f::Transform(const Matrix4f & Matrix)
 {
-    float Value0((Matrix._[0] * _[0]) + (Matrix._[4] * _[1]) + (Matrix._[8] * _[2]) + Matrix._[12]);
-    float Value1((Matrix._[1] * _[0]) + (Matrix._[5] * _[1]) + (Matrix._[9] * _[2]) + Matrix._[13]);
-    float Value2((Matrix._[2] * _[0]) + (Matrix._[6] * _[1]) + (Matrix._[10] * _[2]) + Matrix._[14]);
+    float Value0((Matrix._[0] * m_Components[0]) + (Matrix._[4] * m_Components[1]) + (Matrix._[8] * m_Components[2]) + Matrix._[12]);
+    float Value1((Matrix._[1] * m_Components[0]) + (Matrix._[5] * m_Components[1]) + (Matrix._[9] * m_Components[2]) + Matrix._[13]);
+    float Value2((Matrix._[2] * m_Components[0]) + (Matrix._[6] * m_Components[1]) + (Matrix._[10] * m_Components[2]) + Matrix._[14]);
     
-    _[0] = Value0;
-    _[1] = Value1;
-    _[2] = Value2;
+    m_Components[0] = Value0;
+    m_Components[1] = Value1;
+    m_Components[2] = Value2;
     
     return *this;
 }
 
 inline Vector3f & Vector3f::Translate(const Vector3f & Vector)
 {
-    _[0] += Vector._[0];
-    _[1] += Vector._[1];
-    _[2] += Vector._[2];
+    m_Components[0] += Vector.m_Components[0];
+    m_Components[1] += Vector.m_Components[1];
+    m_Components[2] += Vector.m_Components[2];
     
     return *this;
 }
 
 inline Vector3f & Vector3f::Rotate(const Quaternion & Quaternion)
 {
-    auto Term1(Quaternion._[3] - _[0] * Quaternion._[2] + _[1] * Quaternion._[1] + _[2] * Quaternion._[0]);
-    auto Term2(Quaternion._[2] + _[0] * Quaternion._[3] + _[1] * Quaternion._[0] - _[2] * Quaternion._[1]);
-    auto Term3(Quaternion._[1] + _[0] * Quaternion._[0] - _[1] * Quaternion._[3] + _[2] * Quaternion._[2]);
-    auto Term4(Quaternion._[0] - _[0] * Quaternion._[1] - _[1] * Quaternion._[2] - _[2] * Quaternion._[3]);
+    auto Term1(Quaternion._[3] - m_Components[0] * Quaternion._[2] + m_Components[1] * Quaternion._[1] + m_Components[2] * Quaternion._[0]);
+    auto Term2(Quaternion._[2] + m_Components[0] * Quaternion._[3] + m_Components[1] * Quaternion._[0] - m_Components[2] * Quaternion._[1]);
+    auto Term3(Quaternion._[1] + m_Components[0] * Quaternion._[0] - m_Components[1] * Quaternion._[3] + m_Components[2] * Quaternion._[2]);
+    auto Term4(Quaternion._[0] - m_Components[0] * Quaternion._[1] - m_Components[1] * Quaternion._[2] - m_Components[2] * Quaternion._[3]);
     
-    _[0] = Quaternion._[2] * Term1 - Quaternion._[3] * Term2 + Quaternion._[0] * Term3 - Quaternion._[1] * Term4;
-    _[1] = -Quaternion._[1] * Term1 + Quaternion._[0] * Term2 + Quaternion._[3] * Term3 - Quaternion._[2] * Term4;
-    _[2] = Quaternion._[0] * Term1 + Quaternion._[1] * Term2 - Quaternion._[2] * Term3 - Quaternion._[3] * Term4;
+    m_Components[0] = Quaternion._[2] * Term1 - Quaternion._[3] * Term2 + Quaternion._[0] * Term3 - Quaternion._[1] * Term4;
+    m_Components[1] = -Quaternion._[1] * Term1 + Quaternion._[0] * Term2 + Quaternion._[3] * Term3 - Quaternion._[2] * Term4;
+    m_Components[2] = Quaternion._[0] * Term1 + Quaternion._[1] * Term2 - Quaternion._[2] * Term3 - Quaternion._[3] * Term4;
     
     return *this;
 }
 
 inline Vector3f & Vector3f::Scale(float Scale)
 {
-    _[0] *= Scale;
-    _[1] *= Scale;
-    _[2] *= Scale;
+    m_Components[0] *= Scale;
+    m_Components[1] *= Scale;
+    m_Components[2] *= Scale;
     
     return *this;
 }
@@ -343,9 +351,9 @@ inline Vector3f Vector3f::Scaled(float Scale) const
 {
     Vector3f Result;
     
-    Result._[0] = Scale * _[0];
-    Result._[1] = Scale * _[1];
-    Result._[2] = Scale * _[2];
+    Result.m_Components[0] = Scale * m_Components[0];
+    Result.m_Components[1] = Scale * m_Components[1];
+    Result.m_Components[2] = Scale * m_Components[2];
     
     return Result;
 }
